@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Light Theme */
+  --bg-primary: #fffffe;
+  --text-primary: #333333;
+  --text-secondary: gray;
+  --accent: #3551b2;
+  --card: #f6f7f6;
+  --button: #5772cd;
+  --un-button: #ebeaef;  /* When button is not clicked */
+}
+
+[data-theme="dark"] {
+  /* Dark Theme */
+  --bg-primary: #030917;
+  --text-primary: #f0f0f0;
+  --text-secondary: gray;
+  --accent: #030917;
+  --card: #030917;
+  --button: #3e63dd;
+  --un-button: #33363f;  /* When button is not clicked */
+
+}
