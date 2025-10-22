@@ -1,36 +1,35 @@
-import  { useState, useEffect } from 'react';
-import AdminPage from './pages/AdminPage';
-import UserPage from './pages/userPage';
+import { useState, useEffect } from "react";
+import { RouterProvider } from "react-router-dom";
+import { router } from "./routes/index"; // adjust path
+import MainLayout from "./layout/MainLayout";
+import AdminPage from "./pages/AdminPage";
 
 const App = () => {
   const [isAdminView, setIsAdminView] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.ctrlKey && e.key === 'F12') {
-        e.preventDefault(); 
-        setIsAdminView(prev => !prev);
+      if (e.ctrlKey && e.key === "F12") {
+        e.preventDefault();
+        setIsAdminView((prev) => !prev);
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
   return (
-    <div>
+    <>
       {isAdminView ? (
-        <AdminPage />
+        <MainLayout>
+          <AdminPage />
+        </MainLayout>
       ) : (
-        <UserPage />
+        <RouterProvider router={router} />
       )}
-    </div>
+    </>
   );
 };
-
-
 
 export default App;
