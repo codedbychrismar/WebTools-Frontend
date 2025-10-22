@@ -78,17 +78,18 @@ const UserPage = () => {
 
       {/* Header Section */}
       <div className="bg-transparent py-24 flex justify-center">
-        <main className="flex flex-col py-12 lg:flex-row items-start justify-between gap-12 w-full max-w-7xl">
+        <main className="flex flex-col py-16 lg:flex-row items-start justify-between gap-12 w-full max-w-7xl">
           
           {/* Text */}
-          <div className="flex-1 lg:flex-[0.6] flex flex-col items-center lg:items-start gap-4 text-center lg:text-left">
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-[var(--accent)] leading-tight">
-              Build Smarter, Faster
+          <div className="flex-1 lg:flex-[0.6] flex flex-col items-center lg:items-start gap-4 text-center lg:text-left px-4 sm:px-0 py-4">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--accent)] leading-tight">
+              Build and Code Smarter, Deliver Faster            
             </h1>
-            <p className="text-lg sm:text-xl md:text-2xl lg:text-2xl text-white/80 leading-relaxed">
-              Discover beautifully designed, open-source tools that make building web apps easier. Powered by <span className="font-semibold">React</span>, <span className="font-semibold">Tailwind</span>, and <span className="font-semibold">Vite</span>.
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 leading-relaxed max-w-xl">
+              Discover beautifully designed, open-source tools that make building web apps easier.
             </p>
           </div>
+
 
           {/* Image */}
           <div className="flex-1 lg:flex-[0.4] flex justify-center lg:justify-end w-full lg:w-auto">
@@ -120,7 +121,7 @@ const UserPage = () => {
             </div>
 
         {/* Items Section */}
-        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
           {items.map((item, index) => (
             <ItemCard
               key={`${item.name}-${index}`}
