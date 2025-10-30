@@ -85,20 +85,20 @@ export function EditToolDialog({
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="bg-gradient-to-br from-[#0d1131] to-[#1a1f3a] border-gray-800/50 text-white sm:max-w-[550px] shadow-2xl">
+            <DialogContent className="bg-background text-foreground border-border sm:max-w-[500px]">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl flex items-center gap-2">
-                        <Pencil className="h-6 w-6 text-[#8b7dd8]" />
+                    <DialogTitle className="text-xl flex items-center gap-2">
+                        <Pencil className="h-5 w-5 text-[var(--accent)]" />
                         Edit Tool
                     </DialogTitle>
-                    <DialogDescription className="text-gray-300 text-base">
-                        Update the tool information. All fields are required.
+                    <DialogDescription className="text-foreground/70">
+                        Update the tool information
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit}>
-                    <div className="grid gap-5 py-4">
+                    <div className="grid gap-4 py-4">
                         <div className="grid gap-2">
-                            <Label htmlFor="edit-name" className="text-gray-200 text-base">
+                            <Label htmlFor="edit-name" className="text-sm">
                                 Name *
                             </Label>
                             <Input
@@ -106,27 +106,53 @@ export function EditToolDialog({
                                 value={formData.name}
                                 onChange={(e) => handleChange("name", e.target.value)}
                                 placeholder="e.g., Figma"
-                                className="bg-[#1a1f3a] border-gray-700 text-white placeholder:text-gray-500 text-base h-12"
+                                className="h-10"
                             />
                             {errors.name && <p className="text-red-400 text-sm">{errors.name}</p>}
                         </div>
 
-                        <div className="grid gap-2">
-                            <Label htmlFor="edit-icon" className="text-gray-200 text-base">
-                                Icon (emoji) *
-                            </Label>
-                            <Input
-                                id="edit-icon"
-                                value={formData.icon}
-                                onChange={(e) => handleChange("icon", e.target.value)}
-                                placeholder="e.g., 🎨"
-                                className="bg-[#1a1f3a] border-gray-700 text-white placeholder:text-gray-500 text-2xl h-12"
-                            />
-                            {errors.icon && <p className="text-red-400 text-sm">{errors.icon}</p>}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="edit-icon" className="text-sm">
+                                    Icon *
+                                </Label>
+                                <Input
+                                    id="edit-icon"
+                                    value={formData.icon}
+                                    onChange={(e) => handleChange("icon", e.target.value)}
+                                    placeholder="🎨"
+                                    className="h-10 text-lg"
+                                />
+                                {errors.icon && <p className="text-red-400 text-sm">{errors.icon}</p>}
+                            </div>
+
+                            <div className="grid gap-2">
+                                <Label htmlFor="edit-category" className="text-sm">
+                                    Category *
+                                </Label>
+                                <Select
+                                    value={formData.category}
+                                    onValueChange={(value) => handleChange("category", value)}
+                                >
+                                    <SelectTrigger className="h-10">
+                                        <SelectValue placeholder="Select category" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {categories.map((category) => (
+                                            <SelectItem key={category} value={category}>
+                                                {category}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {errors.category && (
+                                    <p className="text-red-400 text-sm">{errors.category}</p>
+                                )}
+                            </div>
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="edit-description" className="text-gray-200 text-base">
+                            <Label htmlFor="edit-description" className="text-sm">
                                 Description *
                             </Label>
                             <Textarea
@@ -134,8 +160,8 @@ export function EditToolDialog({
                                 value={formData.description}
                                 onChange={(e) => handleChange("description", e.target.value)}
                                 placeholder="Describe what this tool does..."
-                                className="bg-[#1a1f3a] border-gray-700 text-white placeholder:text-gray-500 text-base"
-                                rows={3}
+                                className="resize-none"
+                                rows={2}
                             />
                             {errors.description && (
                                 <p className="text-red-400 text-sm">{errors.description}</p>
@@ -143,31 +169,7 @@ export function EditToolDialog({
                         </div>
 
                         <div className="grid gap-2">
-                            <Label htmlFor="edit-category" className="text-gray-200 text-base">
-                                Category *
-                            </Label>
-                            <Select
-                                value={formData.category}
-                                onValueChange={(value) => handleChange("category", value)}
-                            >
-                                <SelectTrigger className="bg-[#1a1f3a] border-gray-700 text-white h-12 text-base">
-                                    <SelectValue placeholder="Select a category" />
-                                </SelectTrigger>
-                                <SelectContent className="bg-[#1a1f3a] border-gray-700 text-white">
-                                    {categories.map((category) => (
-                                        <SelectItem key={category} value={category} className="text-base">
-                                            {category}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {errors.category && (
-                                <p className="text-red-400 text-sm">{errors.category}</p>
-                            )}
-                        </div>
-
-                        <div className="grid gap-2">
-                            <Label htmlFor="edit-url" className="text-gray-200 text-base">
+                            <Label htmlFor="edit-url" className="text-sm">
                                 URL *
                             </Label>
                             <Input
@@ -176,7 +178,7 @@ export function EditToolDialog({
                                 value={formData.url}
                                 onChange={(e) => handleChange("url", e.target.value)}
                                 placeholder="https://example.com"
-                                className="bg-[#1a1f3a] border-gray-700 text-white placeholder:text-gray-500 text-base h-12"
+                                className="h-10"
                             />
                             {errors.url && <p className="text-red-400 text-sm">{errors.url}</p>}
                         </div>
@@ -184,15 +186,15 @@ export function EditToolDialog({
                     <DialogFooter>
                         <Button
                             type="button"
-                            variant="ghost"
+                            variant="outline"
                             onClick={() => onOpenChange(false)}
-                            className="text-gray-300 hover:bg-[#1a1f3a] hover:text-white text-base px-6 py-5"
+                            className="px-4 py-2"
                         >
                             Cancel
                         </Button>
                         <Button
                             type="submit"
-                            className="bg-gradient-to-r from-[#8b7dd8] to-[#9b8de8] hover:from-[#9b8de8] hover:to-[#ab9df8] text-base px-6 py-5 shadow-lg shadow-[#8b7dd8]/30"
+                            className="bg-[var(--accent)] hover:bg-[var(--accent)]/90 px-4 py-2"
                         >
                             <Pencil className="mr-2 h-4 w-4" />
                             Update Tool

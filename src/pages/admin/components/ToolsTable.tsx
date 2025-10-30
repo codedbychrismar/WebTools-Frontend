@@ -54,7 +54,8 @@ export function ToolsTable({ tools, categories, onUpdate, onDelete }: ToolsTable
 
                 <Table>
                     <TableHeader>
-                        <TableRow className="border-gray-800/50 hover:bg-[#1a1f3a]/60 bg-[#0d1131]/40">
+                        <TableRow className="border-gray-800/50 text-center hover:bg-[#1a1f3a]/60 bg-[#0d1131]/40">
+                            <TableHead className="text-gray-300 text-base py-6"></TableHead>
                             <TableHead className="text-gray-300 text-base py-6">Icon</TableHead>
                             <TableHead className="text-gray-300 text-base py-6">Name</TableHead>
                             <TableHead className="text-gray-300 text-base py-6">Description</TableHead>
@@ -66,7 +67,7 @@ export function ToolsTable({ tools, categories, onUpdate, onDelete }: ToolsTable
                     <TableBody>
                         {tools.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={6} className="text-center text-gray-500 py-16 text-lg">
+                                <TableCell colSpan={6} className=" text-gray-500 py-16 text-lg">
                                     <div className="flex flex-col items-center gap-3">
                                         <Zap className="h-12 w-12 text-gray-600 opacity-50" />
                                         <p>No tools found. Add your first tool to get started.</p>
