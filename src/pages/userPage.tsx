@@ -35,7 +35,7 @@ const UserPage = () => {
       link: "/playground",
     },
 
-        {
+    {
       logo: ToolsIcon,
       name: "3D Builder",
       description: "A tool to design 3D models with ease.",
@@ -53,7 +53,7 @@ const UserPage = () => {
       description: "Experiment and code in a 3D environment.",
       link: "/playground",
     },
-        {
+    {
       logo: ToolsIcon,
       name: "3D Builder",
       description: "A tool to design 3D models with ease.",
@@ -79,13 +79,13 @@ const UserPage = () => {
       {/* Header Section */}
       <div className="bg-transparent py-24 flex justify-center">
         <main className="flex flex-col py-16 lg:flex-row items-start justify-between gap-12 w-full max-w-7xl">
-          
+
           {/* Text */}
           <div className="flex-1 lg:flex-[0.6] flex flex-col items-center lg:items-start gap-4 text-center lg:text-left px-4 sm:px-0 py-4">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--accent)] leading-tight">
-              Build and Code Smarter, Deliver Faster            
+              Build and Code Smarter, Deliver Faster
             </h1>
-            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-white/80 leading-relaxed max-w-xl">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-foreground/80 leading-relaxed max-w-xl">
               Discover beautifully designed, open-source tools that make building web apps easier.
             </p>
           </div>
@@ -102,28 +102,28 @@ const UserPage = () => {
         </main>
       </div>
 
-      <div className="flex flex-col gap-6"> 
+      <div className="flex flex-col gap-6">
 
-            <div className="flex flex-wrap gap-4 justify-start mt-8">
-              {buttons.map((btn) => (
-                <Button
-                  key={btn}
-                  onClick={() => setSelectedButton(btn)}
-                  className={`${
-                    selectedButton === btn
-                      ? "bg-[var(--accent)] text-white"
-                      : "bg-white/10 text-white hover:bg-white/20"
-                  } px-6 py-2 rounded-lg transition`}
-                >
-                  {btn}
-                </Button>
-              ))}
-            </div>
+        <div className="flex flex-wrap gap-4 justify-start mt-8">
+          {buttons.map((btn) => (
+            <Button
+              key={btn}
+              onClick={() => setSelectedButton(btn)}
+              className={`${selectedButton === btn
+                ? "bg-[var(--accent)] text-foreground/80"
+                : "bg-white/10 text-foreground/80 hover:bg-white/20"
+                } px-6 py-2 rounded-lg transition`}
+            >
+              {btn}
+            </Button>
+          ))}
+        </div>
 
         {/* Items Section */}
         <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
           {items.map((item, index) => (
             <ItemCard
+
               key={`${item.name}-${index}`}
               logo={item.logo}
               name={item.name}
