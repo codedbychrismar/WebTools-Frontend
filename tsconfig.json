@@ -9,5 +9,5 @@
     "module": "ES2022",            
     "moduleResolution": "bundler"
   },
-  "include": ["src"]
+  "include": ["src", "vite-env.d.ts"],
 }

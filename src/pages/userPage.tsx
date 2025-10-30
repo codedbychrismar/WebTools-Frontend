@@ -1,77 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import ToolsIcon from "../assets/toolsIcon.png";
 import ItemCard from "@/components/ItemCard";
 
-interface Item {
-  logo: string;
+const BACKEND_URL = import.meta.env.VITE_API_URL;
+
+interface Tool {
+  tool_id: string;
   name: string;
   description: string;
-  link: string;
+  icon: string;
+  category: string;
+  url: string;
+  created_at: string;
+  updated_at: string;
 }
 
 const UserPage = () => {
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [tools, setTools] = useState<Tool[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<string[]>([]);
   const [selectedButton, setSelectedButton] = useState<string>("Design 3D");
-
   const buttons: string[] = ["Design 3D", "Code 3D", "Animate 3D"];
 
-  const items: Item[] = [
-    {
-      logo: ToolsIcon,
-      name: "3D Builder",
-      description: "A tool to design 3D models with ease.",
-      link: "/builder",
-    },
-    {
-      logo: ToolsIcon,
-      name: "3D Animator",
-      description: "Animate your 3D creations seamlessly.",
-      link: "/animator",
-    },
-    {
-      logo: ToolsIcon,
-      name: "3D Playground",
-      description: "Experiment and code in a 3D environment.",
-      link: "/playground",
-    },
+  
+  useEffect(() => {
+    const fetchTools = async () => {
+      try {
+        const response = await fetch(`${BACKEND_URL}/api/tools`);
+        const data = await response.json();
+        console.log(data);
 
-    {
-      logo: ToolsIcon,
-      name: "3D Builder",
-      description: "A tool to design 3D models with ease.",
-      link: "/builder",
-    },
-    {
-      logo: ToolsIcon,
-      name: "3D Animator",
-      description: "Animate your 3D creations seamlessly.",
-      link: "/animator",
-    },
-    {
-      logo: ToolsIcon,
-      name: "3D Playground",
-      description: "Experiment and code in a 3D environment.",
-      link: "/playground",
-    },
-    {
-      logo: ToolsIcon,
-      name: "3D Builder",
-      description: "A tool to design 3D models with ease.",
-      link: "/builder",
-    },
-    {
-      logo: ToolsIcon,
-      name: "3D Animator",
-      description: "Animate your 3D creations seamlessly.",
-      link: "/animator",
-    },
-    {
-      logo: ToolsIcon,
-      name: "3D Playground",
-      description: "Experiment and code in a 3D environment.",
-      link: "/playground",
-    },
-  ];
+        if (data.success) {
+          const toolsData: Tool[] = data.data;
+          setTools(toolsData);
+
+          const uniqueCategories: string[] = [
+            "All",
+            ...Array.from(new Set(toolsData.map((tool) => tool.category))),
+          ];
+          setCategories(uniqueCategories);
+        } else {
+          console.error("Error fetching tools:", data.message);
+        }
+      } catch (err) {
+        console.error("Fetch error:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTools();
+  }, []);
+
+  const filteredTools =
+    selectedCategory === "All"
+      ? tools
+      : tools.filter((tool) => tool.category === selectedCategory);
 
   return (
     <div className="min-h-screen transition-colors px-6 sm:px-10 md:px-16 lg:px-24 xl:px-48">
@@ -121,22 +107,19 @@ const UserPage = () => {
 
         {/* Items Section */}
         <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
-          {items.map((item, index) => (
+          {tools.map((item, index) => (
             <ItemCard
 
               key={`${item.name}-${index}`}
-              logo={item.logo}
+              logo={item.icon}
               name={item.name}
               description={item.description}
-              link={item.link}
+              link={item.url}
             />
           ))}
         </div>
 
       </div>
-
-
-
     </div>
   );
 };
