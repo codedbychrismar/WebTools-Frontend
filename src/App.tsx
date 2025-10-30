@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { RouterProvider } from "react-router-dom";
 import { router } from "./routes/index"; // adjust path
 import MainLayout from "./layout/MainLayout";
-import AdminPage from "./pages/AdminPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
 
 const App = () => {
   const [isAdminView, setIsAdminView] = useState(false);
@@ -23,7 +23,7 @@ const App = () => {
     <>
       {isAdminView ? (
         <MainLayout>
-          <AdminPage />
+          <AdminDashboard />
         </MainLayout>
       ) : (
         <RouterProvider router={router} />
