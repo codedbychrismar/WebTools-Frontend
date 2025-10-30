@@ -21,7 +21,10 @@ const UserPage = () => {
   const [tools, setTools] = useState<Tool[]>([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<string[]>([]);
+  const [selectedButton, setSelectedButton] = useState<string>("Design 3D");
+  const buttons: string[] = ["Design 3D", "Code 3D", "Animate 3D"];
 
+  
   useEffect(() => {
     const fetchTools = async () => {
       try {
@@ -58,9 +61,11 @@ const UserPage = () => {
 
   return (
     <div className="min-h-screen transition-colors px-6 sm:px-10 md:px-16 lg:px-24 xl:px-48">
-      {/* Header */}
+
+      {/* Header Section */}
       <div className="bg-transparent py-24 flex justify-center">
         <main className="flex flex-col py-16 lg:flex-row items-start justify-between gap-12 w-full max-w-7xl">
+
           {/* Text */}
           <div className="flex-1 lg:flex-[0.6] flex flex-col items-center lg:items-start gap-4 text-center lg:text-left px-4 sm:px-0 py-4">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--accent)] leading-tight">
@@ -71,7 +76,9 @@ const UserPage = () => {
             </p>
           </div>
 
-          <div className="flex-1 flex justify-center lg:justify-end">
+
+          {/* Image */}
+          <div className="flex-1 lg:flex-[0.4] flex justify-center lg:justify-end w-full lg:w-auto">
             <img
               src={ToolsIcon}
               alt="Hero Icon"
@@ -81,40 +88,37 @@ const UserPage = () => {
         </main>
       </div>
 
-      {/* Category Buttons */}
-      <div className="flex flex-wrap gap-4 justify-start mt-8">
-        {categories.map((category) => (
-          <Button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`${
-              selectedCategory === category
-                ? "bg-[var(--accent)] text-white"
-                : "bg-white/10 text-foreground/80 hover:bg-white/20"
-            } px-6 py-2 rounded-lg transition`}
-          >
-            {category}
-          </Button>
-        ))}
-      </div>
+      <div className="flex flex-col gap-6">
 
-      {/* Tools Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
-        {loading ? (
-          <p className="text-white">Loading tools...</p>
-        ) : filteredTools.length === 0 ? (
-          <p className="text-white">No tools found for this category.</p>
-        ) : (
-          filteredTools.map((tool) => (
+        <div className="flex flex-wrap gap-4 justify-start mt-8">
+          {buttons.map((btn) => (
+            <Button
+              key={btn}
+              onClick={() => setSelectedButton(btn)}
+              className={`${selectedButton === btn
+                ? "bg-[var(--accent)] text-foreground/80"
+                : "bg-white/10 text-foreground/80 hover:bg-white/20"
+                } px-6 py-2 rounded-lg transition`}
+            >
+              {btn}
+            </Button>
+          ))}
+        </div>
+
+        {/* Items Section */}
+        <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
+          {tools.map((item, index) => (
             <ItemCard
-              key={tool.tool_id}
-              logo={tool.icon || ToolsIcon}
-              name={tool.name}
-              description={tool.description}
-              link={tool.url}
+
+              key={`${item.name}-${index}`}
+              logo={item.icon}
+              name={item.name}
+              description={item.description}
+              link={item.url}
             />
-          ))
-        )}
+          ))}
+        </div>
+
       </div>
     </div>
   );
