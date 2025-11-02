@@ -21,11 +21,11 @@ const UserPage = () => {
   const [tools, setTools] = useState<Tool[]>([]);
   const [categories, setCategories] = useState<string[]>(["All"]);
   const [loading, setLoading] = useState(true);
+  const [showAllCategories, setShowAllCategories] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch both tools and categories in parallel
         const [toolsRes, categoriesRes] = await Promise.all([
           fetch(`${BACKEND_URL}/api/tools`),
           fetch(`${BACKEND_URL}/api/tools/categories`)
@@ -60,13 +60,16 @@ const UserPage = () => {
     );
   }
 
+  // Slice category list if more than 7
+  const visibleCategories = showAllCategories
+    ? categories
+    : categories.slice(0, 7);
+
   return (
     <div className="min-h-screen transition-colors px-6 sm:px-10 md:px-16 lg:px-24 xl:px-48">
-
       {/* Header Section */}
       <div className="bg-transparent py-24 flex justify-center">
         <main className="flex flex-col py-16 lg:flex-row items-start justify-between gap-12 w-full max-w-7xl">
-
           {/* Text */}
           <div className="flex-1 lg:flex-[0.6] flex flex-col items-center lg:items-start gap-4 text-center lg:text-left px-4 sm:px-0 py-4">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[var(--accent)] leading-tight">
@@ -89,20 +92,32 @@ const UserPage = () => {
       </div>
 
       {/* Category Buttons */}
-      <div className="flex flex-wrap gap-4 justify-start mt-8">
-        {categories.map((category) => (
-          <Button
-            key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`${
-              selectedCategory === category
-                ? "bg-[var(--accent)] text-white"
-                : "bg-[var(--bg-primary)] hover:bg-[var(--bg-primary)]/20 text-[var(--text-primary)]"
-            } px-6 py-2 rounded-lg transition border border-gray-300`}
+      <div className="flex flex-col gap-4 mt-8">
+        <div className="flex flex-wrap gap-4 justify-start">
+          {visibleCategories.map((category) => (
+            <Button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              className={`${
+                selectedCategory === category
+                  ? "bg-[var(--accent)] text-white"
+                  : "bg-[var(--bg-primary)] hover:bg-[var(--bg-primary)]/20 text-[var(--text-primary)]"
+              } px-6 py-2 rounded-lg transition border border-gray-300`}
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
+
+        {/* Show more/less toggle */}
+        {categories.length > 7 && (
+          <button
+            onClick={() => setShowAllCategories(!showAllCategories)}
+            className="text-[var(--accent)] text-sm hover:underline self-start"
           >
-            {category}
-          </Button>
-        ))}
+            {showAllCategories ? "Show less ▲" : "Show more ▼"}
+          </button>
+        )}
       </div>
 
       {/* Tools Grid */}
