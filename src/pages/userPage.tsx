@@ -19,45 +19,46 @@ interface Tool {
 const UserPage = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [tools, setTools] = useState<Tool[]>([]);
+  const [categories, setCategories] = useState<string[]>(["All"]);
   const [loading, setLoading] = useState(true);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [selectedButton, setSelectedButton] = useState<string>("Design 3D");
-  const buttons: string[] = ["Design 3D", "Code 3D", "Animate 3D"];
 
-  
   useEffect(() => {
-    const fetchTools = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${BACKEND_URL}/api/tools`);
-        const data = await response.json();
-        console.log(data);
+        // Fetch both tools and categories in parallel
+        const [toolsRes, categoriesRes] = await Promise.all([
+          fetch(`${BACKEND_URL}/api/tools`),
+          fetch(`${BACKEND_URL}/api/tools/categories`)
+        ]);
 
-        if (data.success) {
-          const toolsData: Tool[] = data.data;
-          setTools(toolsData);
+        const toolsJson = await toolsRes.json();
+        const categoriesJson = await categoriesRes.json();
 
-          const uniqueCategories: string[] = [
-            "All",
-            ...Array.from(new Set(toolsData.map((tool) => tool.category))),
-          ];
-          setCategories(uniqueCategories);
-        } else {
-          console.error("Error fetching tools:", data.message);
-        }
+        if (toolsJson.success) setTools(toolsJson.data);
+        if (categoriesJson.success)
+          setCategories(["All", ...categoriesJson.data]);
       } catch (err) {
-        console.error("Fetch error:", err);
+        console.error("Error fetching data:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTools();
+    fetchData();
   }, []);
 
   const filteredTools =
     selectedCategory === "All"
       ? tools
       : tools.filter((tool) => tool.category === selectedCategory);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen text-lg">
+        Loading tools...
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen transition-colors px-6 sm:px-10 md:px-16 lg:px-24 xl:px-48">
@@ -76,7 +77,6 @@ const UserPage = () => {
             </p>
           </div>
 
-
           {/* Image */}
           <div className="flex-1 lg:flex-[0.4] flex justify-center lg:justify-end w-full lg:w-auto">
             <img
@@ -88,38 +88,40 @@ const UserPage = () => {
         </main>
       </div>
 
-      <div className="flex flex-col gap-6">
+      {/* Category Buttons */}
+      <div className="flex flex-wrap gap-4 justify-start mt-8">
+        {categories.map((category) => (
+          <Button
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            className={`${
+              selectedCategory === category
+                ? "bg-[var(--accent)] text-white"
+                : "bg-[var(--bg-primary)] hover:bg-[var(--bg-primary)]/20 text-[var(--text-primary)]"
+            } px-6 py-2 rounded-lg transition border border-gray-300`}
+          >
+            {category}
+          </Button>
+        ))}
+      </div>
 
-        <div className="flex flex-wrap gap-4 justify-start mt-8 ">
-          {buttons.map((btn) => (
-            <Button
-              key={btn}
-              onClick={() => setSelectedButton(btn)}
-              className={`${selectedButton === btn
-                ? "bg-[var(--accent)] text-white "
-                : "bg-[var(--bg-primary)] hover:bg-[var(--bg-primary)]/20 text-[var(--text-primary)] "
-                } px-6 py-2 rounded-lg transition border border-gray-30 `}
-            >
-              {btn}
-            </Button>
-          ))}
-        </div>
-
-        {/* Items Section */}
-        <div className=" grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
-          {tools.map((item, index) => (
+      {/* Tools Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 py-8">
+        {filteredTools.length > 0 ? (
+          filteredTools.map((item, index) => (
             <ItemCard
-
               key={`${item.name}-${index}`}
               logo={item.icon}
               name={item.name}
               description={item.description}
               link={item.url}
             />
-          ))}
-        </div>
-
-
+          ))
+        ) : (
+          <p className="text-center col-span-full text-gray-500 py-8">
+            No tools found for this category.
+          </p>
+        )}
       </div>
     </div>
   );
