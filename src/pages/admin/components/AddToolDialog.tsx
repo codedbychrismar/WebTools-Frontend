@@ -18,12 +18,13 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Zap } from "lucide-react";
+import { Zap, Loader2 } from "lucide-react";
+import type { CreateToolRequest } from "../adminTypes";
 
 type AddToolDialogProps = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
-    onSubmit: (tool: Omit<any, "id">) => void;
+    onSubmit: (tool: CreateToolRequest) => Promise<void>;
     categories: string[];
 };
 
@@ -33,7 +34,7 @@ export function AddToolDialog({
     onSubmit,
     categories,
 }: AddToolDialogProps) {
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<CreateToolRequest>({
         name: "",
         description: "",
         icon: "",
@@ -42,8 +43,9 @@ export function AddToolDialog({
     });
 
     const [errors, setErrors] = useState<Record<string, string>>({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Validation
@@ -59,26 +61,50 @@ export function AddToolDialog({
             return;
         }
 
-        onSubmit(formData);
-        setFormData({
-            name: "",
-            description: "",
-            icon: "",
-            category: "",
-            url: "",
-        });
-        setErrors({});
-    };
-
-    const handleChange = (field: string, value: string) => {
-        setFormData({ ...formData, [field]: value });
-        if (errors[field]) {
-            setErrors({ ...errors, [field]: "" });
+        setIsSubmitting(true);
+        try {
+            await onSubmit(formData);
+            // Reset form on successful submission
+            setFormData({
+                name: "",
+                description: "",
+                icon: "",
+                category: "",
+                url: "",
+            });
+            setErrors({});
+        } catch (error) {
+            // Error is handled by parent component, just re-throw
+            throw error;
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
+    const handleChange = (field: string, value: string) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+        if (errors[field]) {
+            setErrors(prev => ({ ...prev, [field]: "" }));
+        }
+    };
+
+    const handleOpenChange = (open: boolean) => {
+        if (!open && !isSubmitting) {
+            // Reset form when dialog is closed
+            setFormData({
+                name: "",
+                description: "",
+                icon: "",
+                category: "",
+                url: "",
+            });
+            setErrors({});
+        }
+        onOpenChange(open);
+    };
+
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogContent className="bg-background text-foreground border-border sm:max-w-[500px]">
                 <DialogHeader>
                     <DialogTitle className="text-xl flex items-center gap-2">
@@ -101,6 +127,7 @@ export function AddToolDialog({
                                 onChange={(e) => handleChange("name", e.target.value)}
                                 placeholder="e.g., Figma"
                                 className="h-10"
+                                disabled={isSubmitting}
                             />
                             {errors.name && <p className="text-red-400 text-sm">{errors.name}</p>}
                         </div>
@@ -116,6 +143,7 @@ export function AddToolDialog({
                                     onChange={(e) => handleChange("icon", e.target.value)}
                                     placeholder="🎨"
                                     className="h-10 text-lg"
+                                    disabled={isSubmitting}
                                 />
                                 {errors.icon && <p className="text-red-400 text-sm">{errors.icon}</p>}
                             </div>
@@ -127,6 +155,7 @@ export function AddToolDialog({
                                 <Select
                                     value={formData.category}
                                     onValueChange={(value) => handleChange("category", value)}
+                                    disabled={isSubmitting}
                                 >
                                     <SelectTrigger className="h-10">
                                         <SelectValue placeholder="Select category" />
@@ -156,6 +185,7 @@ export function AddToolDialog({
                                 placeholder="Describe what this tool does..."
                                 className="resize-none"
                                 rows={2}
+                                disabled={isSubmitting}
                             />
                             {errors.description && (
                                 <p className="text-red-400 text-sm">{errors.description}</p>
@@ -173,6 +203,7 @@ export function AddToolDialog({
                                 onChange={(e) => handleChange("url", e.target.value)}
                                 placeholder="https://example.com"
                                 className="h-10"
+                                disabled={isSubmitting}
                             />
                             {errors.url && <p className="text-red-400 text-sm">{errors.url}</p>}
                         </div>
@@ -181,17 +212,23 @@ export function AddToolDialog({
                         <Button
                             type="button"
                             variant="outline"
-                            onClick={() => onOpenChange(false)}
+                            onClick={() => handleOpenChange(false)}
                             className="px-4 py-2"
+                            disabled={isSubmitting}
                         >
                             Cancel
                         </Button>
                         <Button
                             type="submit"
                             className="bg-[var(--accent)] hover:bg-[var(--accent)]/90 px-4 py-2"
+                            disabled={isSubmitting}
                         >
-                            <Zap className="mr-2 h-4 w-4" />
-                            Add Tool
+                            {isSubmitting ? (
+                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            ) : (
+                                <Zap className="mr-2 h-4 w-4" />
+                            )}
+                            {isSubmitting ? "Adding..." : "Add Tool"}
                         </Button>
                     </DialogFooter>
                 </form>
