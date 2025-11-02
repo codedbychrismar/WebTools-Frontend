@@ -90,15 +90,15 @@ const UserPage = () => {
 
       <div className="flex flex-col gap-6">
 
-        <div className="flex flex-wrap gap-4 justify-start mt-8">
+        <div className="flex flex-wrap gap-4 justify-start mt-8 ">
           {buttons.map((btn) => (
             <Button
               key={btn}
               onClick={() => setSelectedButton(btn)}
               className={`${selectedButton === btn
-                ? "bg-[var(--accent)] text-foreground/80"
-                : "bg-white/10 text-foreground/80 hover:bg-white/20"
-                } px-6 py-2 rounded-lg transition`}
+                ? "bg-[var(--accent)] text-white "
+                : "bg-[var(--bg-primary)] hover:bg-[var(--bg-primary)]/20 text-[var(--text-primary)] "
+                } px-6 py-2 rounded-lg transition border border-gray-30 `}
             >
               {btn}
             </Button>
@@ -118,6 +118,7 @@ const UserPage = () => {
             />
           ))}
         </div>
+
 
       </div>
     </div>

@@ -17,9 +17,9 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-20 py-5">
+    <nav className="fixed top-0 left-0 w-full z-20 py-5 ">
       <motion.div
-        className={`flex items-center justify-between px-6 md:px-12 py-2 ${
+        className={`flex items-center justify-between px-6 md:px-12 py-2 shadow-md ${
           !scrolled
             ? "bg-transparent"
             : "border border-gray-200 rounded-2xl bg-[var(--bg-primary)] mx-4 md:mx-auto md:w-[60%]"
@@ -68,7 +68,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-[var(--bg-primary)] border border-gray-200 rounded-2xl mx-4 mt-2 overflow-hidden"
+            className="md:hidden bg-[var(--bg-primary)] border border-gray-200 rounded-2xl mx-4 mt-2 overflow-hidden shadow-lg"
           >
             <div className="flex flex-col gap-4 p-4 text-[var(--text-primary)]">
               <a href="#" onClick={() => setMenuOpen(false)}>Home</a>

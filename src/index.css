@@ -12,7 +12,7 @@
   --text-primary: #333333;
   --text-secondary: gray;
   --accent: #3551b2;
-  --card: #f6f7f6;
+  --card: #fffffe;
   --button: #5772cd;
   --un-button: #ebeaef; /* When button is not clicked */
 
@@ -28,7 +28,7 @@
   --text-primary: #f0f0f0;
   --text-secondary: gray;
   --accent: #A8B1FF;
-  --card: #030917;
+  --card: #202227;
   --button: #3e63dd;
   --un-button: #33363f; /* When button is not clicked */
 
