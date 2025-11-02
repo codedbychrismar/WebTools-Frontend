@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.VITE_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 import type { Tool, CreateToolRequest, ApiResponse } from '../adminTypes';
 
 
@@ -24,36 +24,36 @@ api.interceptors.response.use(
 export const toolsApi = {
     // 🧩 CREATE
     createTool: async (toolData: CreateToolRequest): Promise<Tool> => {
-        const response = await api.post<ApiResponse<Tool>>('/tools', toolData);
+        const response = await api.post<ApiResponse<Tool>>('/api/tools', toolData);
         return response.data.data;
     },
 
     // 🧰 GET ALL
     getAllTools: async (): Promise<Tool[]> => {
-        const response = await api.get<ApiResponse<Tool[]>>('/tools');
+        const response = await api.get<ApiResponse<Tool[]>>('/api/tools');
         return response.data.data;
     },
 
     // 🔍 GET BY ID
     getToolById: async (id: string): Promise<Tool> => {
-        const response = await api.get<ApiResponse<Tool>>(`/tools/${id}`);
+        const response = await api.get<ApiResponse<Tool>>(`/api/tools/${id}`);
         return response.data.data;
     },
 
     // 🔧 UPDATE
     updateTool: async (id: string, toolData: Partial<CreateToolRequest>): Promise<Tool> => {
-        const response = await api.put<ApiResponse<Tool>>(`/tools/${id}`, toolData);
+        const response = await api.put<ApiResponse<Tool>>(`/api/tools/${id}`, toolData);
         return response.data.data;
     },
 
     // 🗑️ DELETE
     deleteTool: async (id: string): Promise<void> => {
-        await api.delete<ApiResponse<void>>(`/tools/${id}`);
+        await api.delete<ApiResponse<void>>(`/api/tools/${id}`);
     },
 
     // 🧭 GET ALL CATEGORIES
     getCategories: async (): Promise<string[]> => {
-        const response = await api.get<ApiResponse<string[]>>('/tools/categories');
+        const response = await api.get<ApiResponse<string[]>>('/api/tools/categories');
         return response.data.data;
     },
 };
